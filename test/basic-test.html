@@ -1,0 +1,46 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../bower_components/web-component-tester/browser.js"></script>
+
+    <!-- Step 1: import the element to test -->
+    <link rel="import" href="../paperkit-dashboard.html">
+    <link rel="import" href="../paperkit-dashboard-item.html">
+  </head>
+  <body>
+
+    <!-- You can use the document as a place to set up your fixtures. -->
+    <paperkit-dashboard cols="2" rows="2" layout="vertical">
+    	<paperkit-dashboard-item id="first" left="0" top="0" width="1" height="1"></paperkit-dashboard-item>
+    	<paperkit-dashboard-item id="second" left="0" top="1" wdith="1" height="1"></paperkit-dashboard-item>
+    	<paperkit-dashboard-item id="third" left="1" top="1" width="1" height="1"></paperkit-dashboard-item>
+    </paperkit-dashboard>
+
+    <script>
+      var myEl = document.querySelector('paperkit-dashboard');
+
+      suite('<paperkit-dashboard>', function() {
+
+        test('checks items are correctly packed', function() {
+          assert.equal(myEl.author.name, 'Dimitri Glazkov');
+          assert.equal(myEl.author.image, 'http://addyosmani.com/blog/wp-content/uploads/2013/04/unicorn.jpg');
+        });
+
+      });
+    </script>
+
+  </body>
+</html>

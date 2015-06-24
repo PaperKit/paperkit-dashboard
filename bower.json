@@ -1,0 +1,33 @@
+{
+  "name": "paperkit-dashboard",
+  "version": "0.5.0",
+  "authors": [
+    "David María Arribas <dmariaa@datatrends.es>"
+  ],
+  "description": "Dashboard layout system.",
+  "keywords": [
+    "web-components",
+    "paperkit",    
+    "dashboard"
+  ],
+  "main": [
+  	"paperkit-dashboard.html",
+  	"paperkit-dashboard-item.html"
+  ],
+  "license": "http://paperkit.github.io/LICENSE.txt",
+  "homepage": "https://github.com/PaperKit/paperkit-dashboard/",
+  "ignore": [
+    "/.*",
+    "/test/",
+    "/demo/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0",
+    "paperkit-dragcontainer": "PaperKit/paperkit-dragcontainer#^0.5.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "paper-icon-button": "PolymerElements/paper-icon-button#^1.0.0"
+    "web-component-tester": "*",    
+  }
+}

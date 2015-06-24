@@ -1,0 +1,81 @@
+<!--
+@license
+-->
+<link rel="import" href="bower_components/polymer/polymer.html">
+
+<!--
+Paperkit dashboard system base element.
+
+Example:
+
+    <paperkit-dashboard></paperkit-dashboard>
+
+@demo
+-->
+<dom-module id="paperkit-dashboard-item">
+   <style>
+ 	:host {
+ 		display: block;
+ 		position: absolute !important;
+ 		box-sizing:border-box;
+  	-moz-box-sizing:border-box;
+  	-webkit-box-sizing:border-box;  
+	}
+	
+	.unselectable {  
+	  -webkit-user-select: none;
+	  -khtml-user-select: none;
+	  -moz-user-select: none;
+	  -o-user-select: none;
+	  user-select: none;
+ 	}
+ 	</style>
+  <template>  
+  	<content></content>
+  </template>
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'paperkit-dashboard-item',
+
+    properties: {
+      left: {
+        type: Number,
+        reflectToAttribute: true
+      },
+      top: {
+        type: Number,
+        reflectToAttribute: true
+      },
+      width:{
+        type: Number,
+        reflectToAttribute: true
+      },
+      height: {
+        type: Number,
+        reflectToAttribute: true
+      },
+      isDraggable: {
+        type: Boolean,
+        reflectToAttribute: true,
+        value: true
+      }
+    },
+
+    // Element Lifecycle
+    ready: function() {
+    },
+
+    attached: function() {
+    },
+
+    detached: function() {
+    },
+
+    // Element Behavior
+  });
+
+</script>
