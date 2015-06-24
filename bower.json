@@ -23,7 +23,7 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#^1.0.0",
-    "paperkit-dragcontainer": "PaperKit/paperkit-dragcontainer#^0.5.0"
+    "paperkit-dragcontainer": "PaperKit/paperkit-dragcontainer#*"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
