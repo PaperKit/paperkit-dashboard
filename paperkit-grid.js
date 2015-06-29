@@ -1,3 +1,10 @@
+/*
+@license
+Copyright (c) The PaperKit Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://http://paperkit.github.io/LICENSE.txt
+The complete set of authors may be found at http://paperkit.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://paperkit.github.io/CONTRIBUTORS.txt
+*/
 var PaperKit = PaperKit || {};
 
 PaperKit.Tools = (function() {
@@ -75,6 +82,11 @@ PaperKit.Grid.prototype = {
     this.updateItemPosition(item, position);
   },  
   findPositionForItem: function(item, index) {
+    // Basic responsiveness :-)...
+    if(item.width > this.options.cols) {
+      item.width = this.options.cols;
+    }    
+    
     if(this.options.layout=='vertical') {
       if(item.left + item.width > this.options.cols) {
         item.left = this.options.cols - item.width;
