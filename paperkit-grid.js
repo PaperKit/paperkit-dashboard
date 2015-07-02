@@ -48,7 +48,9 @@ PaperKit.Grid.prototype = {
   defaults: {
     layout: 'vertical'    
   },
-  initGrid: function() {
+  initGrid: function(rows, cols) {
+    this.options.rows = rows;
+    this.options.cols = cols;
     this.items.sort(this.sortItemsInLayoutFunction.bind(this));
     this.items.forEach(this.positionItemFunction.bind(this));
   },

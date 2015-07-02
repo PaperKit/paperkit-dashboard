@@ -6,6 +6,7 @@ The complete set of authors may be found at http://paperkit.github.io/AUTHORS.tx
 The complete set of contributors may be found at http://paperkit.github.io/CONTRIBUTORS.txt
 -->
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../paperkit-dragcontainer/paperkit-draggable-behavior.html">
 <!--
 Paperkit dashboard system base element.
@@ -48,8 +49,13 @@ Example:
     is: 'paperkit-dashboard-item',
     
     behaviors: [
-			PaperKit.Behaviors.DraggableBehavior
+			PaperKit.Behaviors.DraggableBehavior,
+			Polymer.IronResizableBehavior
 		],
+		
+		listeners: {
+      'iron-resize': '_resize'
+		},
 
     properties: {
       left: {
@@ -76,6 +82,9 @@ Example:
     },
 
     // Element Behavior
+    _resize: function(event) {
+      console.log('child resize');
+    }
   });
 
 </script>

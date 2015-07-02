@@ -6,6 +6,7 @@ The complete set of authors may be found at http://paperkit.github.io/AUTHORS.tx
 The complete set of contributors may be found at http://paperkit.github.io/CONTRIBUTORS.txt
 -->
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../paperkit-dragcontainer/paperkit-dragcontainer-behavior.html">
 
 <!--
@@ -22,9 +23,12 @@ Example:
   <style>
   	:host {
   		display: inline-block;
-  		width: 400px;
-  		height: 400px;
-  		border: 1px solid gray;
+  		margin: 0px;
+  		padding: 0px;
+  		top: 0;
+  		bottom: 0;
+  		right: 0;
+  		left: 0;
   		position: absolute;
   	}
   	
@@ -48,7 +52,8 @@ Example:
     is: 'paperkit-dashboard',
     
     behaviors: [ 
-			PaperKit.Behaviors.DragContainerBehavior 
+			PaperKit.Behaviors.DragContainerBehavior,
+			Polymer.IronResizableBehavior
 		],
 
     properties: {
@@ -67,8 +72,13 @@ Example:
     listeners: {
       'drag-start': '_startDragging',
       'drag': '_doDragging',
-      'drag-end': '_endDragging'
+      'drag-end': '_endDragging',
+      'iron-resize': '_resize'
     },
+    
+    observers: [
+			'_updateRowsCols(rows, cols)'
+		],
     
     // Items
     items: [],
@@ -81,6 +91,7 @@ Example:
       this.items = elements;      
       this.grid = new PaperKit.Grid(this.items, {rows: this.rows, cols: this.cols, layout: 'vertical'});
       this.dragEndTransitionEndBinding = this.dragEndTransitionEnd.bind(this);
+      this.refresh();
     },
 
     // Behaviour
@@ -104,6 +115,23 @@ Example:
 		  dstElement.width = srcElement.width;
 		  dstElement.height = srcElement.height;
 		},
+		get parent() {
+      if (this.parentNode.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
+        return this.parentNode.host;
+      }
+      return this.parentNode;
+    },
+		_resize: function() {
+		  var w = this.offsetWidth;
+		  var cw = w / this.cols;
+		  if(this.offsetHeight > 0) {
+			  this.rows = Math.floor(this.offsetHeight / cw) + 1;
+			  this.refresh();		    
+		  }
+ 		},
+ 		_updateRowsCols: function(rows, cols) {
+ 			this._resize();  
+ 		},
     _startDragging: function(event) {      
 	    // Now show hint in actual position
 	    var element = event.target;
@@ -158,9 +186,11 @@ Example:
       }
     },
     refresh: function() {
-      this.grid.initGrid();
-    	this.resizeElements();
-    	this.positionElements();
+      if(this.grid) {
+        this.grid.initGrid(this.rows, this.cols);
+      	this.resizeElements();
+      	this.positionElements();        
+      }
     },
     resizeElements: function() {
       for(var i=0, length = this.items.length; i < length; i++) {
