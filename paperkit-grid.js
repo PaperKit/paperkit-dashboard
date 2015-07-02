@@ -40,7 +40,7 @@ PaperKit.Grid = function(items, options) {
   }
   this.items = items;
   for(var i=0, length=items.length; i < length; i++) {
-    this.items[i].id = i;
+    this.items[i].sortid = i;
   }
 }
 
@@ -78,6 +78,9 @@ PaperKit.Grid.prototype = {
     }
   },
   positionItemFunction: function(item, index) {
+    if(item.width > this.options.cols) {
+      item.width = this.options.cols;
+    }
     var position = this.findPositionForItem(item, index);
     this.updateItemPosition(item, position);
   },  

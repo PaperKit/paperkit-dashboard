@@ -5,8 +5,8 @@ This code may only be used under the BSD style license found at http://http://pa
 The complete set of authors may be found at http://paperkit.github.io/AUTHORS.txt
 The complete set of contributors may be found at http://paperkit.github.io/CONTRIBUTORS.txt
 -->
-<link rel="import" href="bower_components/polymer/polymer.html">
-
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paperkit-dragcontainer/paperkit-draggable-behavior.html">
 <!--
 Paperkit dashboard system base element.
 
@@ -19,11 +19,13 @@ Example:
 <dom-module id="paperkit-dashboard-item">
    <style>
  	:host {
- 		display: block;
- 		position: absolute !important;
+ 		display: inline-block;
+ 		position: absolute;
  		box-sizing:border-box;
   	-moz-box-sizing:border-box;
-  	-webkit-box-sizing:border-box;  
+  	-webkit-box-sizing:border-box;
+  	padding: 2px 2px;  
+  	background-clip: content-box;
 	}
 	
 	.unselectable {  
@@ -44,6 +46,10 @@ Example:
   Polymer({
 
     is: 'paperkit-dashboard-item',
+    
+    behaviors: [
+			PaperKit.Behaviors.DraggableBehavior
+		],
 
     properties: {
       left: {
@@ -67,16 +73,6 @@ Example:
         reflectToAttribute: true,
         value: true
       }
-    },
-
-    // Element Lifecycle
-    ready: function() {
-    },
-
-    attached: function() {
-    },
-
-    detached: function() {
     },
 
     // Element Behavior
