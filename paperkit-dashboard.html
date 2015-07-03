@@ -8,6 +8,7 @@ The complete set of contributors may be found at http://paperkit.github.io/CONTR
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../paperkit-dragcontainer/paperkit-dragcontainer-behavior.html">
+<link rel="import" href="../paperkit-grid-behavior/paperkit-grid-behavior.html">
 
 <!--
 Paperkit dashboard system base element.
@@ -19,7 +20,6 @@ Example:
 @demo
 -->
 <dom-module id="paperkit-dashboard">
-	<script src="paperkit-grid.js"></script>
   <style>
   	:host {
   		display: inline-block;
@@ -53,20 +53,11 @@ Example:
     
     behaviors: [ 
 			PaperKit.Behaviors.DragContainerBehavior,
+			PaperKit.Behaviors.GridBehavior,
 			Polymer.IronResizableBehavior
 		],
 
     properties: {
-      rows: {
-        type: Number,
-        value: 10,
-        reflectToAttribute: true
-      },
-      cols: {
-        type: Number,
-        value: 10,
-        reflectToAttribute: true
-      }
     },
     
     listeners: {
@@ -76,45 +67,16 @@ Example:
       'iron-resize': '_resize'
     },
     
-    observers: [
-			'_updateRowsCols(rows, cols)'
-		],
-    
-    // Items
-    items: [],
-    
     // Element Lifecycle
     ready: function() {
       // Binded functions      
-      var elements = Polymer.dom(Polymer.dom(this.root).querySelector('content')).getDistributedNodes();
+      this.items = Polymer.dom(Polymer.dom(this.root).querySelector('content')).getDistributedNodes();
       this.hint = Polymer.dom(this.root).querySelector('#hint');
-      this.items = elements;      
-      this.grid = new PaperKit.Grid(this.items, {rows: this.rows, cols: this.cols, layout: 'vertical'});
       this.dragEndTransitionEndBinding = this.dragEndTransitionEnd.bind(this);
       this.refresh();
     },
 
     // Behaviour
-    contains: function(a, obj) {
-    	var i = a.length;
-    	while (i--) {
-      	if (a[i] === obj) {
-           return true;
-       	}
-    	}    	
-    	return false;
-		},
-		clonePosition: function(dstElement, srcElement) {		  
-		  dstElement.style.top = srcElement.style.top;
-		  dstElement.style.left = srcElement.style.left;
-		  dstElement.style.width = srcElement.style.width;
-		  dstElement.style.height = srcElement.style.height;
-		  
-		  dstElement.left = srcElement.left;
-		  dstElement.top = srcElement.top;
-		  dstElement.width = srcElement.width;
-		  dstElement.height = srcElement.height;
-		},
 		get parent() {
       if (this.parentNode.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
         return this.parentNode.host;
@@ -129,24 +91,20 @@ Example:
 			  this.refresh();		    
 		  }
  		},
- 		_updateRowsCols: function(rows, cols) {
- 			this._resize();  
- 		},
     _startDragging: function(event) {      
 	    // Now show hint in actual position
 	    var element = event.target;
 	    element.style.zIndex = 1;
-			this.clonePosition(this.hint, element);
 			this.hint.style.display = 'inline-block';				
-			this.grid.replaceElement(element, this.hint);
+			this._replaceElement(element, this.hint);
 			this.refresh();
     },
     _doDragging: function(event) {
       var element = event.target;
-      var centerX = event.detail.x + (element.offsetWidth / 2);
-      var centerY = event.detail.y + (element.offsetHeight / 2);      
-			this.hint.left = Math.floor(centerX / this.calculateCellWidth());
-			this.hint.top = Math.floor(centerY / this.calculateCellHeight());
+      var centerX = event.detail.x; // + (element.offsetWidth / 2);
+      var centerY = event.detail.y; // + (element.offsetHeight / 2);      
+			this.hint.left = Math.floor(centerX / this._cellWidth);
+			this.hint.top = Math.floor(centerY / this._cellHeight) + ((centerY / this._cellHeight) % 1 > 0.5 ? 1 : -1);
 			this.refresh();
     },    
     _endDragging: function(event) {
@@ -161,10 +119,9 @@ Example:
 				element.removeEventListener(PaperKit.Tools.transitionEvent, this.dragEndTransitionEndBinding);
 				element.style.transition = "";
 				element.style.zIndex = 0;
-				this.grid.replaceElement(this.hint, element);
+				this._replaceElement(this.hint, element);
 				this.hint.style.display = 'none';
-      }       
-      this.clonePosition(element, this.hint);
+			}             
     },
     dragEndTransitionEnd: function(event) {
       var element = event.target;      
@@ -181,38 +138,9 @@ Example:
           element.removeEventListener(PaperKit.Tools.transitionEvent, this.dragEndTransitionEndBinding);
           element.style.transition = "";
           element.style.zIndex = 0;
-          this.grid.replaceElement(this.hint, element);
+          this._replaceElement(this.hint, element);
         }        
       }
-    },
-    refresh: function() {
-      if(this.grid) {
-        this.grid.initGrid(this.rows, this.cols);
-      	this.resizeElements();
-      	this.positionElements();        
-      }
-    },
-    resizeElements: function() {
-      for(var i=0, length = this.items.length; i < length; i++) {
-        var item = this.items[i];
-        item.style.width = (Number(item.width) * this.calculateCellWidth()) + "px";
-        item.style.height = (Number(item.height) * this.calculateCellHeight()) + "px";
-      }
-    },
-    positionElements: function() {
-      for(var i=0, length = this.items.length; i < length; i++) {
-        var item = this.items[i];
-        item.style.left = (Number(item.left) * this.calculateCellWidth()) + "px"; 
-        item.style.top = (Number(item.top) * this.calculateCellHeight()) + "px";
-      }      
-    },
-    calculateCellHeight: function() {
-      var height = this.getBoundingClientRect().height; 
-      return height / this.rows;
-    },
-    calculateCellWidth: function() {
-      var width = this.getBoundingClientRect().width; 
-      return width / this.cols;
     }
   });
 
